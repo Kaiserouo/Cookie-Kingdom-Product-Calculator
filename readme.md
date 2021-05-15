@@ -7,16 +7,16 @@
     + 賣掉8餅乾粉4果醬：23288金幣。
     + 賣掉8餅乾粉8麵包24豆豆：25888金幣。
 + 計算一產品所需基本材料
-  + e.g. 玻璃捧花需要`{'瑞士卷木柴': 24, '豆豆果凍': 20, '方糖': 0, '餅乾粉': 8, '果凍莓': 4, '香醇牛奶': 0, '棉花糖羊毛': 2}`，至少舊配方應該是這樣。
+  + e.g. 別緻的優格花環要`瑞士卷木柴:192 豆豆果凍:30 方糖:0 餅乾粉:64 果凍莓:72 香醇牛奶:0 棉花糖羊毛:0`。非常厲害的配方。
 + 單純輸出排版
   + 因為全部都變成python class的形式，要怎麼輸出隨便你。
   + 因為官方常改數據，這個格式應該算比較好更動的了。配上程式可以把複雜計算自動化。
 
-前兩項的code在`main.py`可以找到，在main區塊改掉就可以在兩模式互換了。
+前兩項的code在`main.py`可以找到，在main區塊改掉就可以在兩模式互換了。範例輸出為`value_table.txt`和`base_ingr.txt`
 
 基本上各種事項都能完成。不過目前是用command line排版就是了。
 
-**注意：極大部分資料來源是[薑餅人王國資訊(line)](https://timeline.line.me/user/_dc_QO8G7ggGbjbSHCYc76i_gegvzmatkCww5Ogc?utm_medium=windows&utm_source=desktop&utm_campaign=OA_Profile)。目前`products.txt`裡面是用截至2021/5/14的資訊，代表新的配方和一些產品的配方和許願樹價值都未更新。** 如果要使用的話需要更新`produces.txt`的內容。
+極大部分資料來源是[薑餅人王國資訊(line)](https://timeline.line.me/user/_dc_QO8G7ggGbjbSHCYc76i_gegvzmatkCww5Ogc?utm_medium=windows&utm_source=desktop&utm_campaign=OA_Profile)和[HoyfSam1](https://forum.gamer.com.tw/C.php?bsn=70199&snA=1367&tnum=6&bPage=2)。處理薑餅人王國資訊(line)的程式在`deprecated/`裡面；驗證跟HoyfSam1的excel的相異處的程式在`check_excel.py`。
 
 ## How to Use
 直接跑`main.py`：

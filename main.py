@@ -57,7 +57,10 @@ def calBaseComponent(node):
 
 def printBaseComponent(nodes):
     for n in nodes:
-        print(n.item.name, n.d)
+        print(f"{n.item.name}: ", end='')
+        for i in n.d.items():
+            print(f'{i[0]}:{i[1]} ', end='')
+        print()
 
 if __name__ == '__main__':
     # read in all data
@@ -70,9 +73,9 @@ if __name__ == '__main__':
     # walk
 
     # get all number of base ingredient needed for each product:
-    # node_class.Node.topologicalWalk(nodes, calBaseComponent)
-    # printBaseComponent(nodes)
+    node_class.Node.topologicalWalk(nodes, calBaseComponent)
+    printBaseComponent(nodes)
     
     # get all kinds of values for products
-    node_class.Node.topologicalWalk(nodes, calValueTable)
-    printValueTable(nodes)
+    # node_class.Node.topologicalWalk(nodes, calValueTable)
+    # printValueTable(nodes)
