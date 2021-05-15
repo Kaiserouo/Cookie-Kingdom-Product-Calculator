@@ -10,7 +10,7 @@ Write the compound and ingredients in `ingredient_class.py` and run `cal_cost.py
 
 ## How to Change Value Table Output
 
-In `cal_cost.py`, value is generated via topological sort. All nodes in graph contains a kind of ingredient / compound, and links is established in terms of `(ingredient -> compound)`.
+In `cal_cost.py`, value is generated via topological sort. All nodes in graph contains a kind of ingredient / compound, and links are established in terms of `(ingredient -> compound)`.
 
 For example, here is the graph of 椪糖果醬 (old recipe):
 ![](images/jam.png)
