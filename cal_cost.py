@@ -22,7 +22,7 @@ class Node:
         self.item = item
 
     def connectLink(self, to_node, req_amt=1):
-        # make line (self -> to_node)
+        # make link (self -> to_node)
         self.out_nodes.add(to_node)
         to_node.in_nodes.add(self)
         to_node.in_req_amt[self] = req_amt
@@ -36,6 +36,8 @@ class Node:
         # get required amount for an ingredient
         return self.in_req_amt[ing_node] if ing_node in self.in_req_amt else None
     
+    # in / out degree of this node. Note that it doesn't have to do
+    # with cur_in_deg in topologicalWalk.
     @property
     def in_deg(self):
         return len(self.in_nodes)
@@ -50,6 +52,8 @@ class Node:
     
     @staticmethod
     def topologicalWalk(nodes, apply_func):
+        # apply `apply_func` to nodes in the order of topological sort.
+        # nodes: List[Nodes]
         avail_nodes = [node for node in nodes if node.in_deg == 0]
         for node in nodes: 
             node.cur_in_deg = node.in_deg
@@ -68,7 +72,7 @@ class Node:
         return str(self.item)
 
 def make_nodes(*ing_lists):
-    # lists of ingredient -> list of nodes
+    # List[Union[Base, Compound]], ... -> Map[Name -> Node]
     node_dict = {
         ing.name: Node(ing) 
         for ing in itertools.chain.from_iterable(ing_lists)
@@ -92,6 +96,8 @@ def func(node):
     # cost: ingredient cost of making it
     #       i.e. sum of all base ingredient cost needed
     # use_ing: whether best_value > item_value
+    #          i.e. it will profit even if ingredient not profitable
+
     item = node.item
     node.one_d_ing_value = item.value if isinstance(item, Base) else 0
     node.cost = item.cost if isinstance(item, Base) else 0
@@ -112,6 +118,7 @@ if __name__ == '__main__':
     node_dict = make_nodes(base_list, compound_list)
     nodes = list(node_dict.values())
     Node.topologicalWalk(nodes, func)
+
     print(f'     ing_cost(ic)    value           one_d_ing_value(odiv)     best_ing_value(biv)')
     print(f'     value-ic        value-odiv      value-biv')
     print(f'-------------------------------------------------------------------------------------------')

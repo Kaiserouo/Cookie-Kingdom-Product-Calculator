@@ -2,9 +2,9 @@ import functools
 
 class Base:
     def __init__(self, name, produce_cost, produce_time, value, produce_count=1):
-        self.name = name        # string
+        self.name = name
         self.cost = produce_cost / produce_count        # per one thing
-        self.time = produce_time / produce_count
+        self.time = produce_time / produce_count        # seconds
         self.value = value
     def __str__(self):
         return self.name
@@ -16,9 +16,9 @@ class Base:
 class Compound:
     def __init__(self, name, ingredients, value, time):
         self.name = name
-        self.ingredients = ingredients  # [(name, count)]
-                                        # guarentee DAG
-        self.time = time                # second: int
+        self.ingredients = ingredients  # [(name, count), ...]
+                                        # guarentee DAG: has valid topologival sort
+        self.time = time                # seconds
         self.value = value
     def __str__(self):
         return self.name
@@ -28,6 +28,8 @@ class Compound:
         return str(self) < str(other)
 
 def check_name(base_list, compound_list):
+    # check if all names are valid
+    # i.e. see whether there are ingredients that are not listed below
     from itertools import chain
     names = set()
     for i in chain(base_list, compound_list):
@@ -38,6 +40,7 @@ def check_name(base_list, compound_list):
                 print(str(i))
 
 base_list = [
+    # uses most efficient recipe
     #    name         cost    time    value     count
     Base("瑞士卷木柴",  30,     30,      50,      3 ),
     Base("豆豆果凍",    50,     60,      89,      3 ),
@@ -49,7 +52,12 @@ base_list = [
 ]
 
 compound_list = [
+    # commented compounds are the ones either don't know the sell value,
+    # don't know the ingredients, or ingredients are also commented.
+    #
+    #       name     ingredients
     #       value    time(second)
+
     # 鏗鏘打鐵鋪
     Compound('堅硬斧頭', [('瑞士卷木柴', 2)],
             123,      30),
