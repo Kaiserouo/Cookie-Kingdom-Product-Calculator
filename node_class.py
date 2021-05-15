@@ -1,12 +1,3 @@
-"""
-    calculate cost of everything by ingredient_class.py
-"""
-
-# TODO:
-#   - make graph of everything, obtaining their loss
-#   - do something close to topological sort
-#   - output all loss, by some format
-
 from ingredient_class import *
 import functools
 import itertools
@@ -72,7 +63,7 @@ class Node:
         return str(self.item)
 
 def make_nodes(*ing_lists):
-    # List[Union[Base, Compound]], ... -> Map[Name -> Node]
+    # List[Union[Base, Compound]], ... -> Map[Name: Node]
     node_dict = {
         ing.name: Node(ing) 
         for ing in itertools.chain.from_iterable(ing_lists)
@@ -86,42 +77,3 @@ def make_nodes(*ing_lists):
                 node_dict[ing_name].connectLink(node, p[1])
     
     return node_dict
-
-def func(node):
-    # in: ingredients
-    # out: products
-
-    # one_d_ing_value: sum of sell value of ingredients
-    # best_value: best possible selling value
-    # cost: ingredient cost of making it
-    #       i.e. sum of all base ingredient cost needed
-    # use_ing: whether best_value > item_value
-    #          i.e. it will profit even if ingredient not profitable
-
-    item = node.item
-    node.one_d_ing_value = item.value if isinstance(item, Base) else 0
-    node.cost = item.cost if isinstance(item, Base) else 0
-    node.best_ing_value = item.value if isinstance(item, Base) else 0
-
-    for n in node.in_nodes:
-        node.one_d_ing_value += n.item.value * node.getReqAmt(n)
-        node.best_ing_value += max(n.item.value, n.best_ing_value) * node.getReqAmt(n)
-        node.cost += n.cost * node.getReqAmt(n)
-    
-    if item.value < node.best_ing_value:
-        node.use_ing = True
-    else:
-        node.use_ing = False
-        
-
-if __name__ == '__main__':
-    node_dict = make_nodes(base_list, compound_list)
-    nodes = list(node_dict.values())
-    Node.topologicalWalk(nodes, func)
-
-    print(f'     ing_cost(ic)    value           one_d_ing_value(odiv)     best_ing_value(biv)')
-    print(f'     value-ic        value-odiv      value-biv')
-    print(f'-------------------------------------------------------------------------------------------')
-    for n in nodes:
-        print(f'{n.item.name}\n     {n.cost:<15.2f} {n.item.value:<15.2f} {n.one_d_ing_value:<25.2f} {n.best_ing_value:<20.2f}')
-        print(f'     {n.item.value - n.cost:<15.2f} {n.item.value - n.one_d_ing_value:<15.2f} {n.item.value-n.best_ing_value:<25.2f}')
