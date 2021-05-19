@@ -57,10 +57,23 @@ def calBaseComponent(node):
 
 def printBaseComponent(nodes):
     for n in nodes:
-        print(f"{n.item.name}: ", end='')
+        print(f"{n.item.name}")
         for i in n.d.items():
-            print(f'{i[0]}:{i[1]} ', end='')
+            if i[1] == 0: continue
+            print(f'    └── {i[0]}:{i[1]} ')
         print()
+
+def printAllIngr(node, prefix='', is_first=False, mul=1):
+    if is_first: print(prefix + node.item.name)
+
+    for i, cur_node in enumerate(node.in_nodes):
+        if i == len(node.in_nodes) - 1:
+            print(prefix + '└── ' + f'{cur_node.item.name} ({node.getReqAmt(cur_node)})')
+            printAllIngr(cur_node, prefix + '    ')
+        else:
+            print(prefix + '├── ' + f'{cur_node.item.name} ({node.getReqAmt(cur_node)})')
+            printAllIngr(cur_node, prefix + '│   ')
+    
 
 if __name__ == '__main__':
     # read in all data
@@ -72,10 +85,19 @@ if __name__ == '__main__':
 
     # walk
 
-    # get all number of base ingredient needed for each product:
+    # --- get all number of base ingredient needed for each product: ---
     node_class.Node.topologicalWalk(nodes, calBaseComponent)
     printBaseComponent(nodes)
     
-    # get all kinds of values for products
+    # --- get all kinds of values for products ---
     # node_class.Node.topologicalWalk(nodes, calValueTable)
     # printValueTable(nodes)
+
+    # --- print ingredient tree of all product ---
+    # print("The crafting branch only show the recipe for one thing")
+    # print("If you want to know how much base material is used in total, see base_ingr.txt")
+    # print()
+    # for i in nodes:
+    #     if isinstance(i.item, Base): continue
+    #     printAllIngr(i, '', True)
+    #     print()
