@@ -64,6 +64,7 @@ def printBaseComponent(nodes):
         print()
 
 def printAllIngr(node, prefix='', is_first=False, mul=1):
+    # ref. https://github.com/kddeisz/tree/blob/master/tree.py
     if is_first: print(prefix + node.item.name)
 
     for i, cur_node in enumerate(node.in_nodes):
