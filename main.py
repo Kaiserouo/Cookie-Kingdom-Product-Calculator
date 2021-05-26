@@ -74,11 +74,26 @@ def printAllIngr(node, prefix='', is_first=False, mul=1):
         else:
             print(prefix + '├── ' + f'{cur_node.item.name} ({node.getReqAmt(cur_node)})')
             printAllIngr(cur_node, prefix + '│   ')
+
+def printBaseRank(nodes):
+    # sort things first
+    from collections import defaultdict
+    d = defaultdict(list)
+    for node in nodes:
+        for name, cnt in node.d.items():
+            d[name].append((node.item.name, cnt))
+    for name, ls in d.items():
+        ls_sorted = sorted(ls, lambda x: x[1])
+        print(name)
+        for i in ls_sorted:
+            print(f'    └── {i[0]}: {i[1]}')
+        print()
+        
     
 
 if __name__ == '__main__':
     # read in all data
-    base_list, compound_list = product_encoder.decode('products.txt')
+    base_list, compound_list = product_encoder.decode('product_info/products.txt')
 
     # make nodes
     node_dict = node_class.make_nodes(base_list, compound_list)
@@ -87,12 +102,17 @@ if __name__ == '__main__':
     # walk
 
     # --- get all number of base ingredient needed for each product: ---
-    node_class.Node.topologicalWalk(nodes, calBaseComponent)
-    printBaseComponent(nodes)
+    # node_class.Node.topologicalWalk(nodes, calBaseComponent)
+    # printBaseComponent(nodes)
     
     # --- get all kinds of values for products ---
     # node_class.Node.topologicalWalk(nodes, calValueTable)
     # printValueTable(nodes)
+
+    # --- get all kinds of values for products ---
+    # -- but only print negative value-biv ones --
+    # node_class.Node.topologicalWalk(nodes, calValueTable)
+    # printValueTable([n for n in nodes if n.item.value-n.one_d_ing_value < 0])
 
     # --- print ingredient tree of all product ---
     # print("The crafting branch only show the recipe for one thing")
@@ -100,5 +120,9 @@ if __name__ == '__main__':
     # print()
     # for i in nodes:
     #     if isinstance(i.item, Base): continue
-    #     printAllIngr(i, '', True)
+    #     printAllIngr(i, '', True)k
     #     print()
+
+    # --- print ingredient rank ---
+    node_class.Node.topologicalWalk(nodes, calBaseComponent)
+    printBaseRank(nodes)
