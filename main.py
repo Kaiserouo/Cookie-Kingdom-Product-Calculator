@@ -1,19 +1,34 @@
-from utils.ingredient_class import *
-import utils.product_encoder as product_encoder
-import utils.node_class as node_class
+from src.utils.ingredient_class import *
+from src.utils import product_encoder
+from src.utils import node_class
 
-from scripts.base_ingr import *
-from scripts.value import *
+from src.scripts.base_ingr import *
+from src.scripts.value import *
 
 if __name__ == '__main__':
     # read in all data
-    base_list, compound_list = product_encoder.decode('product_info/products.txt')
+    base_list, compound_list, factory_list = \
+        product_encoder.decode('./product_info/products.txt')
 
     # make nodes
-    node_dict = node_class.make_nodes(base_list, compound_list)
+    node_dict = node_class.makeNodes(base_list, compound_list)
     nodes = list(node_dict.values())
 
-    
+    factory_node_list = node_class.makeFactoryNodeList(node_dict, factory_list)
+
+    node_class.Node.topologicalWalk(nodes, calBaseComponent)
+    for factory_name, item_ls in factory_list:
+        print(factory_name)
+        for node in factory_node_list:
+            print('    ' + node.item.name)
+            item_ls = [p for p in node.d.items() if p[1] != 0]
+            for i, (ing_name, cnt) in enumerate(item_ls):
+                if i == len(item_ls) - 1:
+                    print(f'        └── {ing_name}:{cnt}')
+                else:
+                    print(f'        ├── {ing_name}:{cnt}')
+                    
+
 # if __name__ == '__main__':
 #     # read in all data
 #     base_list, compound_list = product_encoder.decode('product_info/products.txt')

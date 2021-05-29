@@ -1,6 +1,5 @@
 from .ingredient_class import *
 import functools
-import itertools
 
 class Node:
     """
@@ -11,7 +10,7 @@ class Node:
         self.out_nodes = set()
         self.in_req_amt = dict()
         self.item = item
-        item.node = self
+        item.node = self    # connects item back to node
 
     def connectLink(self, to_node, req_amt=1):
         # make link (self -> to_node)
@@ -63,11 +62,11 @@ class Node:
     def __repr__(self):
         return str(self.item)
 
-def make_nodes(*ing_lists):
-    # List[Union[Base, Compound]], ... -> Map[Name: Node]
+def makeNodes(ing_lists):
+    # List[Union[Base, Compound]] -> Map[Name: Node]
     node_dict = {
         ing.name: Node(ing) 
-        for ing in itertools.chain.from_iterable(ing_lists)
+        for ing in ing_lists
     }
 
     for node in node_dict.values():
@@ -78,3 +77,9 @@ def make_nodes(*ing_lists):
                 node_dict[ing_name].connectLink(node, p[1])
     
     return node_dict
+
+def makeFactoryNodeList(node_dict, factory_list):
+    return [
+        (name, [item.node for item in items])
+        for name, items in factory_list
+    ]

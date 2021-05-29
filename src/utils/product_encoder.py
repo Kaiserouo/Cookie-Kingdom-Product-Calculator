@@ -34,14 +34,33 @@ def readCompound(ls):
 def decode(fname):
     base_list = []
     compound_list = []
-    with open(fname, 'r') as fin:
+    factory_list = []
+
+    current_factory = None
+    with open(fname, 'r', encoding='utf-8') as fin:
         str_ls = fin.readlines()
         for in_str in str_ls:
-            if in_str.strip() == "" or in_str[0] == '#':
+            # comment
+            if in_str[0] == '#':
                 continue
-            ls = in_str.strip().split(' ')
+            # factory
+            if in_str[0] == '>':
+                current_factory = (' '.join(in_str.split()[1:]), [])
+                factory_list.append(current_factory)
+                continue
+            # blank line
+            if in_str.strip() == "":
+                current_factory = None
+                continue
+
+            ls = in_str.strip().split()
             if 'Compound' in ls[1]:
-                compound_list.append(readCompound(ls))
+                compound_list.append(cur_node := readCompound(ls))
             elif 'Base' in ls[1]:
-                base_list.append(readBase(ls))
-    return base_list, compound_list
+                base_list.append(cur_node := readBase(ls))
+                
+            if current_factory != None:
+                current_factory[1].append(cur_node)
+
+    return base_list, compound_list, factory_list
+    

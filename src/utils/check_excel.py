@@ -16,9 +16,9 @@
 """
 
 
-import .ingredient_class
-import .node_class
-import .product_encoder
+from . import ingredient_class
+from . import node_class
+from . import product_encoder
 import openpyxl
 import re
 

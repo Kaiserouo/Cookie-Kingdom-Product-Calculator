@@ -46,3 +46,9 @@ $ python main.py
 + `print_output(nodes)`：用`apply_func`存在各`Node`的資訊輸出成成果。
 
 簡單的例子可以參考`main.py`的`calBaseComponent`和`printBaseComponent`。
+
+### Todo
++ 把資料夾結構再次重新安排
++ Excel輸出
++ Typing
++ 修改readme
