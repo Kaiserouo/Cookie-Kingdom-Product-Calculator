@@ -1,6 +1,7 @@
 from .ingredient_class import *
+from typing import *
 
-def encode(base_list, compound_list):
+def encode(base_list: List[Base], compound_list: List[Compound]):
     for i in base_list:
         print(f'{i.name}: Base, {i.cost}, {i.time}, {i.value}')
     for i in compound_list:
@@ -8,7 +9,7 @@ def encode(base_list, compound_list):
         print(','.join([f'{p[0]}:{p[1]}' for p in i.ingredients]))
 
 
-def readBase(ls):
+def readBase(ls: List[str]) -> Base:
     # e.g. '香醇牛奶: Base, 350.0, 900.0, 1865'
     name = ls[0][:-1]
     cost = float(ls[2][:-1])
@@ -16,7 +17,7 @@ def readBase(ls):
     sell_value = int(ls[4])
     return Base(name, cost, time, sell_value)
 
-def readCompound(ls):
+def readCompound(ls: List[str]) -> Compound:
     # e.g. '恆久的糖衣槌子: Compound, 21600, 18045, 瑞士卷木柴:30,方糖:35'
     name = ls[0][:-1]
     time = int(ls[2][:-1])
@@ -31,7 +32,9 @@ def readCompound(ls):
     return Compound(name, ing_ls, value, time)
     
 
-def decode(fname):
+def decode(
+        fname: str
+        ) -> Tuple[List[Base], List[Compound], List[Tuple[str, List[Product]]]]:
     base_list = []
     compound_list = []
     factory_list = []

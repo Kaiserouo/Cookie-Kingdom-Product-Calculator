@@ -1,4 +1,5 @@
 import functools
+from typing import *
 
 class Base:
     def __init__(self, name, produce_cost, produce_time, value, produce_count=1):
@@ -31,7 +32,9 @@ class Compound:
     def __lt__(self, other):
         return str(self) < str(other)
 
-def check_name(base_list, compound_list):
+Product = Union[Base, Compound]
+
+def check_name(base_list: List[Base], compound_list: List[Compound]):
     # check if all names are valid
     # i.e. see whether there are ingredients that are not listed below
     from itertools import chain
